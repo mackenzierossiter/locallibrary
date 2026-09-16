@@ -20,6 +20,9 @@ def index(request):
     # Generate counts of genres
     num_genres = Genre.objects.all().count()
 
+    num_genres = Genre.objects.filter(name__icontains='fiction').count()
+    num_books = Book.objects.filter(title__icontains='night').count()
+
 
     context = {
         'num_books': num_books,
