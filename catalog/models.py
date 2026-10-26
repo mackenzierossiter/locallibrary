@@ -32,10 +32,29 @@ class Genre(models.Model):
             ),
         ]
 
+class Author(models.Model):
+    """Model representing an author."""
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    date_of_birth = models.DateField(null=True, blank=True)
+    date_of_death = models.DateField('Died', null=True, blank=True)
+
+    class Meta:
+        ordering = ['last_name', 'first_name']
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular author instance."""
+        return reverse('author-detail', args=[str(self.id)])
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.last_name}, {self.first_name}'
+    
+    
+    
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
     title = models.CharField(max_length=200)
-    author = models.ForeignKey('Author', on_delete=models.RESTRICT, null=True)
     language = models.ForeignKey('Language', on_delete=models.RESTRICT, null=True)
     # Foreign Key used because book can only have one author, but authors can have multiple books.
     # Author as a string rather than object because it hasn't been declared yet in file.
@@ -52,6 +71,8 @@ class Book(models.Model):
     genre = models.ManyToManyField(
         Genre, help_text="Select a genre for this book")
 
+    authors = models.ManyToManyField(Author, through = "BookAuthor", related_name = "books")
+
     def __str__(self):
         """String for representing the Model object."""
         return self.title
@@ -65,6 +86,12 @@ class Book(models.Model):
         return ', '.join(genre.name for genre in self.genre.all()[:3])
 
     display_genre.short_description = 'Genre'
+
+
+class BookAuthor(models.Model):
+    book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
+    author = models.ForeignKey('Author', on_delete=models.RESTRICT, null=True)
+    author_order = models.IntegerField(default=0)
 
 
 import uuid # Required for unique book instances
@@ -101,24 +128,7 @@ class BookInstance(models.Model):
         return f'{self.id} ({self.book.title})'
     
 
-class Author(models.Model):
-    """Model representing an author."""
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    date_of_birth = models.DateField(null=True, blank=True)
-    date_of_death = models.DateField('Died', null=True, blank=True)
 
-    class Meta:
-        ordering = ['last_name', 'first_name']
-
-    def get_absolute_url(self):
-        """Returns the URL to access a particular author instance."""
-        return reverse('author-detail', args=[str(self.id)])
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.last_name}, {self.first_name}'
-    
 class Language(models.Model):
     """Model representing a language (e.g. English, French, Japanese, etc.)"""
     name = models.CharField(
