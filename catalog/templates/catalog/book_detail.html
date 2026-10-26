@@ -3,8 +3,12 @@
 {% block content %}
   <h1>Title: {{ book.title }}</h1>
 
-  <p><strong>Author:</strong> <a href="{% url 'author-detail' book.author.pk %}">{{ book.author }}</a></p>
   <!-- author detail link not yet defined -->
+  <p><strong>Author(s):</strong>
+    {% for author in book.authors.all %}
+      <a href="{% url 'author-detail' author.pk %}">{{ author.first_name }} {{ author.last_name }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </p>
   <p><strong>Summary:</strong> {{ book.summary }}</p>
   <p><strong>ISBN:</strong> {{ book.isbn }}</p>
   <p><strong>Language:</strong> {{ book.language }}</p>
@@ -24,6 +28,8 @@
       {% endif %}
       <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
       <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+
+
     {% endfor %}
   </div>
 {% endblock %}
