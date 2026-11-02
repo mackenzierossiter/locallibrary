@@ -30,6 +30,7 @@
       <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
 
 
+    {% if not author.books.all and perms.catalog.delete_author %}
     {% endfor %}
   </div>
 {% endblock %}

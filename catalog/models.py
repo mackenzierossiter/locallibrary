@@ -91,7 +91,7 @@ class Book(models.Model):
 
 
 class BookAuthor(models.Model):
-    book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
+    book = models.ForeignKey('Book', on_delete=models.CASCADE, null=True)
     author = models.ForeignKey('Author', on_delete=models.RESTRICT, null=True)
     author_order = models.IntegerField(default=0)
 
