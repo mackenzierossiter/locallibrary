@@ -53,3 +53,14 @@ urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
 ]
 
+
+# locallibrary_config/urls.py
+# (after the existing blocks)
+# Mount the Django Ninja API
+from .api import api
+
+urlpatterns += [
+    path('api/', api.urls),
+]
+
+
