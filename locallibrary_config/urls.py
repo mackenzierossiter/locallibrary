@@ -48,12 +48,6 @@ from django.conf.urls.static import static
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
-# Add Django site authentication urls (for login, logout, password management)
-urlpatterns += [
-    path('accounts/', include('django.contrib.auth.urls')),
-]
-
-
 # locallibrary_config/urls.py
 # (after the existing blocks)
 # Mount the Django Ninja API
@@ -64,3 +58,9 @@ urlpatterns += [
 ]
 
 
+
+# Add django-allauth's account urls (for login, logout, sign-up, password management)
+
+urlpatterns += [
+    path('accounts/', include('allauth.urls')),
+]

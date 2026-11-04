@@ -186,3 +186,19 @@ class RenewBookModelForm(ModelForm):
         fields = ['due_back']
         labels = {'due_back': ('Renewal date')}
         help_texts = {'due_back': ('Enter a date between now and 4 weeks (default 3).')}
+
+class UserProfile(models.Model):
+    """Library-specific information about a user, in addition to Django's User model."""
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='profile',
+    )
+    library_card_number = models.CharField(
+        max_length=20, blank=True, help_text='The number printed on the member\'s library card')
+    max_loans = models.PositiveSmallIntegerField(
+        default=5, help_text='How many books this member may borrow at once')
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'Profile for {self.user}'

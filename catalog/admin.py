@@ -64,3 +64,22 @@ class BookInstanceAdmin(admin.ModelAdmin):
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'display_genre')
 
+
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
+
+from .models import UserProfile
+
+
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+
+
+admin.site.unregister(get_user_model())
+
+
+@admin.register(get_user_model())
+class UserWithProfileAdmin(UserAdmin):
+    inlines = [UserProfileInline]

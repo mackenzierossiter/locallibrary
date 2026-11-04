@@ -51,6 +51,12 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig', # This object was created for us in /catalog/apps.py
     'chat',
     'ninja',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.openid_connect',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'locallibrary_config.urls'
@@ -163,5 +170,31 @@ CHANNEL_LAYERS = {
     },
 }
 
+# django-allauth
+AUTHENTICATION_BACKENDS = [
+    # Logs users in by username or by email address. It extends Django's
+    # ModelBackend, so the admin site and permissions work as before.
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
+
+# locallibrary_config/settings.py
+SOCIALACCOUNT_PROVIDERS = {}
+
+GOOGLE_CLIENT_ID = env.str('GOOGLE_CLIENT_ID', default='')
+if GOOGLE_CLIENT_ID:
+    SOCIALACCOUNT_PROVIDERS['google'] = {
+        'APPS': [
+            {
+                'client_id': GOOGLE_CLIENT_ID,
+                'secret': env.str('GOOGLE_CLIENT_SECRET'),
+            },
+        ],
+        'SCOPE': ['profile', 'email'],
+        'OAUTH_PKCE_ENABLED': True,
+    }

@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Borrowed books</h1>
+    <p>You have borrowed {{ paginator.count }} of {{ user.profile.max_loans }} books.</p>
 
     {% if bookinstance_list %}
     <ul>
