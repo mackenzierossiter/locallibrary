@@ -192,7 +192,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='profile',
+        related_name='library_profile',
     )
     library_card_number = models.CharField(
         max_length=20, blank=True, help_text='The number printed on the member\'s library card')

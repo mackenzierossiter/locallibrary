@@ -26,8 +26,8 @@
                     …
                     {% if user.is_authenticated %}
                     <li>User: {{ user.get_username }}</li>
-                    {% if user.profile.library_card_number %}
-                    <li>Card: {{ user.profile.library_card_number }}</li>
+                    {% if user.library_profile.library_card_number %}
+                    <li>Card: {{ user.library_profile.library_card_number }}</li>
                     {% endif %}
 
                     <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>

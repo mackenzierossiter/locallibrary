@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'profiles',
 
     # Add our new application
     'catalog.apps.CatalogConfig', # This object was created for us in /catalog/apps.py
@@ -198,3 +199,28 @@ if GOOGLE_CLIENT_ID:
         'SCOPE': ['profile', 'email'],
         'OAUTH_PKCE_ENABLED': True,
     }
+
+# locallibrary_config/settings.py
+if env.bool('CANVAS_ENABLED', default=False):
+    SOCIALACCOUNT_PROVIDERS['openid_connect'] = {
+        'APPS': [
+            {
+                'provider_id': 'canvas',
+                'name': 'JMU Canvas',
+                'client_id': env.str('CANVAS_CLIENT_ID'),
+                'secret': env.str('CANVAS_CLIENT_SECRET'),
+                'settings': {
+                    'server_url': 'https://canvas.jmu.edu',
+                    'scope': ['openid'],
+                    'fetch_userinfo': True,
+                    'uid_field': 'id',
+                    'openid_configuration_overrides': {
+                        'userinfo_endpoint': 'https://canvas.jmu.edu/api/v1/users/self',
+                    },
+                },
+            },
+        ],
+    }
+
+# locallibrary_config/settings.py
+ACCOUNT_SIGNUP_FORM_CLASS = 'profiles.forms.SignupForm'

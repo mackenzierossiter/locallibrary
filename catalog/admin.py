@@ -69,6 +69,10 @@ class BookAdmin(admin.ModelAdmin):
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
+# Importing profiles.admin first makes sure its User admin is registered
+# before we replace it, whichever order the apps are in INSTALLED_APPS.
+from profiles.admin import ProfileInline
+
 from .models import UserProfile
 
 
@@ -82,4 +86,4 @@ admin.site.unregister(get_user_model())
 
 @admin.register(get_user_model())
 class UserWithProfileAdmin(UserAdmin):
-    inlines = [UserProfileInline]
+    inlines = [ProfileInline, UserProfileInline]
